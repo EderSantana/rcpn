@@ -4,6 +4,7 @@ from scipy.misc import imread, imresize
 from glob import glob
 from natsort import natsorted
 
+
 def prepare_coil100(size):
     data = np.zeros((100, 72, size, size, 3)).astype('uint8')
     files = glob('./data/coil-100/*.png')
@@ -12,8 +13,7 @@ def prepare_coil100(size):
         for j, f in enumerate(fimgs):
             print "Loading objects {}, pose {}".format(i, j)
             data[i-1, j] = imresize(imread(f), (size, size))
-
-
+    return data
 
 
 if __name__ == "__main__":

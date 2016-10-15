@@ -220,7 +220,7 @@ class ConvRNN(Recurrent):
                           dim_ordering=self.dim_ordering,
                           filter_shape=self.U_shape)
         output = self.activation(h + output)
-        output = K.batch_flatten(output)
+        output = K.reshape(output, (self.reshape_dim[0], np.prod(self.reshape_dim[1:])))
         return output, [output]
 
     def get_output_shape_for(self, input_shape):
