@@ -50,10 +50,9 @@ if __name__ == "__main__":
     nb_filters = 9
     # XX = Input(batch_shape=(args.batch, args.time, 3*ims**2))
     XX = Input(batch_shape=(args.batch, args.time, ims, ims, 3))
-    # rnn = ConvRNN(nb_filters, 3, 3, reshape_dim=(args.batch, ims, ims, 3), return_sequences=True, batch_input_shape=(args.batch, args.time, 3*ims*ims), consume_less='gpu', dim_ordering='tf', unroll=True)(XX)
-    rnn = ConvRNN(3, 3, nb_filters, return_sequences=True, batch_input_shape=(args.batch, args.time, ims, ims, 3))(XX)
+    rnn = ConvRNN(nb_filters, 3, 3, reshape_dim=(args.batch, ims, ims, 3), return_sequences=True, batch_input_shape=(args.batch, args.time, 3*ims*ims), consume_less='gpu', dim_ordering='tf', unroll=True)(XX)
+    # rnn = ConvRNN(nb_filters, 3, 3, return_sequences=True, batch_input_shape=(args.batch, args.time, ims, ims, 3))(XX)
     print rnn
-    import ipdb; ipdb.set_trace()
     out = Lambda(lambda x: K.reshape(x, (args.batch, args.time, ims, ims, nb_filters)), batch_input_shape=(args.batch, args.time, nb_filters*ims*ims), output_shape=(args.time, ims, ims, nb_filters))(rnn)
     print out
     out = TimeDistributed(Convolution2D(3, 3, 3, border_mode='same', dim_ordering='tf', batch_input_shape=(args.batch, ims, ims, nb_filters)))(out)
